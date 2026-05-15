@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCEC Exhibition Packages | Microhire</title>
+    <style>
+        :root {
+            --primary-bg: #f4f4f5;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --accent: #2563eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lookbook-container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        select {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #fff;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .display-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
+            background-color: #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .details {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .details h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--accent);
+        }
+
+        .details p {
+            margin: 0;
+            line-height: 1.5;
+            color: #4b5563;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .lookbook-container { padding: 1.5rem; }
+            .header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lookbook-container">
+        <div class="header">
+            <h1>MCEC Exhibition Packages</h1>
+            <p>Select a package to view the scale and layout.</p>
+        </div>
+
+        <div class="controls">
+            <select id="packageSelector" aria-label="Select an exhibition package">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+
+        <div class="display-area">
+            <div class="image-container">
+                <img id="renderImage" src="" alt="MCEC Package Render">
+            </div>
+            
+            <div class="details">
+                <h3 id="packageTitle">Package Title</h3>
+                <p id="packageDesc">Package description will appear here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure for your renders
+        const packages = [
+            {
+                id: "pkg-55-tv",
+                title: "Standard 55\" Display",
+                imageSrc: "mcec-55inch-tv.png",
+                description: "A 55-inch commercial display mounted on a standard floor stand. Ideal for 3x3m booths requiring simple digital signage or presentation playback."
+            },
+            {
+                id: "pkg-floating-led",
+                title: "2.5m x 1.5m Floating LED",
+                imageSrc: "mcec-floating-led.png", 
+                description: "A premium 2.5m x 1.5m flown LED wall. Provides high-impact visibility across the MCEC exhibition floor without consuming valuable booth footprint."
+            },
+        ];
+
+        // DOM Elements
+        const selector = document.getElementById('packageSelector');
+        const renderImage = document.getElementById('renderImage');
+        const packageTitle = document.getElementById('packageTitle');
+        const packageDesc = document.getElementById('packageDesc');
+
+        // Initialize the Lookbook
+        function initLookbook() {
+            // Populate the dropdown
+            packages.forEach((pkg, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = pkg.title;
+                selector.appendChild(option);
+            });
+
+            // Set initial state
+            updateDisplay(0);
+
+            // Listen for changes
+            selector.addEventListener('change', (e) => {
+                updateDisplay(e.target.value);
+            });
+        }
+
+        // Update the UI
+        function updateDisplay(index) {
+            const selectedPackage = packages[index];
+            
+            // Add a quick fade effect for smooth transitions
+            renderImage.style.opacity = 0;
+            
+            setTimeout(() => {
+                renderImage.src = selectedPackage.imageSrc;
+                renderImage.alt = `Render of ${selectedPackage.title} at MCEC`;
+                packageTitle.textContent = selectedPackage.title;
+                packageDesc.textContent = selectedPackage.description;
+                
+                renderImage.style.opacity = 1;
+            }, 150);
+        }
+
+        // Boot it up
+        document.addEventListener('DOMContentLoaded', initLookbook);
+    </script>
+
+</body>
+</html>
